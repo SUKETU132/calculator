@@ -5,21 +5,38 @@
 
 const solve = (value) => {
     let Result = [];
-    Result.push(Number(value[0]));
+    let arr = [];
+    let numberToBeAdded = '';
 
-    for (let i = 1; i < value.length; i += 2) {
-        let secondElement = Number(value[i + 1]);
+    for (let char of value) {
+        if (['*', '+', '-', '/'].includes(char)) {
+            arr.push(Number(numberToBeAdded));
+            arr.push(char);
+            numberToBeAdded = '';
+        } else {
+            numberToBeAdded += char;
+        }
+    }
 
-        if (value[i] === "*") {
+    if (numberToBeAdded) {
+        arr.push(Number(numberToBeAdded));
+    }
+
+    Result.push(arr[0]);
+
+    for (let i = 1; i < arr.length; i += 2) {
+        let secondElement = arr[i + 1];
+
+        if (arr[i] === "*") {
             let firstElement = Result.pop();
             let needToBePushed = firstElement * secondElement;
             Result.push(needToBePushed);
-        } else if (value[i] === "/") {
+        } else if (arr[i] === "/") {
             let firstElement = Result.pop();
             let needToBePushed = firstElement / secondElement;
             Result.push(needToBePushed);
         } else {
-            Result.push(value[i]);
+            Result.push(arr[i]);
             Result.push(secondElement);
         }
     }
@@ -38,6 +55,5 @@ const solve = (value) => {
 
     return answer;
 };
-
 
 export default solve
